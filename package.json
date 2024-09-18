@@ -1,0 +1,9 @@
+{
+  "dependencies": {
+    "node-html-parser": "^6.1.13"
+  },
+  "devDependencies": {
+    "@types/node": "^22.5.5"
+  },
+    "type": "module"
+}
