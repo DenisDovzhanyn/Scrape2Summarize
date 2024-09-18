@@ -23,6 +23,24 @@ const repoNames : string[] = await getRepoNames();
 
 console.log(repoNames);
 
+
+const repoReadMes : string[] = await Promise.all(
+    repoNames.map(async (name) => {
+        const responseFromReadMe : Response = await fetch(`https://raw.githubusercontent.com/DenisDovzhanyn/${name}/main/README.md`);
+
+        if (!responseFromReadMe.ok) {
+            return '';
+        }
+
+        const readMeContent : string = await responseFromReadMe.text();
+        return readMeContent;
+    })
+)
+
+repoReadMes.filter((readme) => readme !== '');
+
+console.log(repoReadMes);
+
 export{
     
 }
