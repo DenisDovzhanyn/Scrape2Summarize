@@ -11,7 +11,7 @@ const htmlFromProfile = async (userProfile : string) => {
     return html;
 }
 
-async function getRepoNames() {
+const getRepoNames = async () => {
     const responseFromProfile = await htmlFromProfile(profile);
     const root = await parser.parse(responseFromProfile);
 
@@ -25,10 +25,7 @@ async function getRepoNames() {
 
 const repoNames : string[] = await getRepoNames();
 
-console.log(repoNames);
-
-
-const repoReadMes : string[] = await Promise.all(
+const unfilteredRepoReadMes : string[] = await Promise.all(
     repoNames.map(async (name) => {
         const responseFromReadMe : Response = await fetch(`https://raw.githubusercontent.com/DenisDovzhanyn/${name}/main/README.md`);
 
@@ -41,9 +38,7 @@ const repoReadMes : string[] = await Promise.all(
     })
 )
 
-repoReadMes.filter((readme) => readme !== '');
-
-console.log(repoReadMes);
+const repoReadMes = unfilteredRepoReadMes.filter((readme) => readme !== '');
 
 const openai = new OpenAI({ apiKey: process.env.apikey}); 
 
@@ -63,7 +58,6 @@ const consumeOpenAi : string[] = await Promise.all(
         return aiResponse.choices[0].message.content || '';
     })
 )
-
 
 console.log(consumeOpenAi);
 
