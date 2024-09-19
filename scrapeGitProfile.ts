@@ -1,5 +1,9 @@
 const profile : string = 'https://github.com/DenisDovzhanyn?tab=repositories';
 import parser from 'node-html-parser';
+import OpenAI from 'openai';
+import * as dotenv from 'dotenv';
+
+dotenv.config({ path: '.env' });
 
 const htmlFromProfile = async (userProfile : string) => {
     const response : Response = await fetch(userProfile);
@@ -40,6 +44,28 @@ const repoReadMes : string[] = await Promise.all(
 repoReadMes.filter((readme) => readme !== '');
 
 console.log(repoReadMes);
+
+const openai = new OpenAI({ apiKey: process.env.apikey}); 
+
+const consumeOpenAi : string[] = await Promise.all(
+    repoReadMes.map(async (readMe) => {
+        const aiResponse = await openai.chat.completions.create({
+        model: 'gpt-4o-mini',
+        messages: [{
+            role: 'system',
+            content: 'You will shorten any given readme to about 4-5 lines'
+        },
+        {
+            role: 'user',
+            content: readMe
+        }]})
+
+        return aiResponse.choices[0].message.content || '';
+    })
+)
+
+
+console.log(consumeOpenAi);
 
 export{
     
