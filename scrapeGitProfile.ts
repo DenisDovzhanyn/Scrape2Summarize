@@ -25,37 +25,43 @@ const getRepoNames = async () => {
 
 const repoNames : string[] = await getRepoNames();
 
-const unfilteredRepoReadMes : string[] = await Promise.all(
+const unfilteredRepos : string[][] = await Promise.all(
     repoNames.map(async (name) => {
         const responseFromReadMe : Response = await fetch(`https://raw.githubusercontent.com/DenisDovzhanyn/${name}/main/README.md`);
 
         if (!responseFromReadMe.ok) {
-            return '';
+            return [name, '', `https://github.com/DenisDovzhanyn/${name}`];
         }
-
+        // change to array so first item is repo name and second is content
         const readMeContent : string = await responseFromReadMe.text();
-        return readMeContent;
+        return [name, readMeContent, `https://github.com/DenisDovzhanyn/${name}`];
     })
 )
 
-const repoReadMes = unfilteredRepoReadMes.filter((readme) => readme !== '');
+const repos = unfilteredRepos;
 
 const openai = new OpenAI({ apiKey: process.env.apikey}); 
 
-const consumeOpenAi : string[] = await Promise.all(
-    repoReadMes.map(async (readMe) => {
+const consumeOpenAi : string[][] = await Promise.all(
+    repos.map(async (repo) => {
         const aiResponse = await openai.chat.completions.create({
         model: 'gpt-4o-mini',
         messages: [{
             role: 'system',
-            content: 'You will shorten any given readme to about 4-5 lines'
+            content: 'You will shorten any given readme to about 4-5 sentences, if the readme is empty simply return that no readme was found'
         },
         {
             role: 'user',
-            content: readMe
+            content: repo[1]
         }]})
 
-        return aiResponse.choices[0].message.content || '';
+        const nameAndSummary: string[] = [
+            repo[0],
+            aiResponse.choices[0].message.content || '',
+            repo[2]
+        ]
+
+        return nameAndSummary;
     })
 )
 
