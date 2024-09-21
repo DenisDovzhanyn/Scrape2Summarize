@@ -1,10 +1,10 @@
 import { UserRepositories, Repository } from "../types/github";
 import OpenAI from 'openai';
 
-const openai = new OpenAI({ apiKey: process.env.apikey}); 
+const openai = new OpenAI({ apiKey: process.env.GPT_API_KEY}); 
 
 export const getSummarizedUserRepos = async (userRepos: UserRepositories): Promise<UserRepositories> => (await Promise.all(
-    Object.entries(userRepos).map(async ([name, {readMe, url}]) => {
+    Object.entries(userRepos).map(async ([name, {readMe, ...rest}]) => {
         const aiResponse = await openai.chat.completions.create({
         model: 'gpt-4o-mini',
         messages: [{
@@ -17,9 +17,9 @@ export const getSummarizedUserRepos = async (userRepos: UserRepositories): Promi
         }]})
 
         return {
-            name,
+            ...rest,
             readMe: aiResponse.choices[0].message.content || '',
-            url
+            
         }
 
     }))

@@ -1,1 +1,21 @@
-{"scripts":{"build":"webpack"},"dependencies":{"dotenv":"^16.4.5","node-html-parser":"^6.1.13","openai":"^4.62.1"},"devDependencies":{"@types/node":"^22.5.5","buffer":"^6.0.3","dotenv-webpack":"^8.1.0","ts-loader":"^9.5.1","webpack":"^5.94.0","webpack-cli":"^5.1.4"}}
+{
+    "scripts":{
+       "build":"webpack",
+       "zip": "tar.exe -C build/ -a -c -f build/build.zip main-bundle.js node_modules_formdata-node_lib_esm_fileFromPath_js-bundle.js",
+       "deploy": "npm run zip && aws lambda update-function-code --function-name GetRepos --zip-file fileb://build/build.zip"
+    },
+    "dependencies":{
+       "aws-sdk":"^2.1691.0",
+       "dotenv":"^16.4.5",
+       "node-html-parser":"^6.1.13",
+       "openai":"^4.62.1"
+    },
+    "devDependencies":{
+       "@types/node":"^22.5.5",
+       "buffer":"^6.0.3",
+       "dotenv-webpack":"^8.1.0",
+       "ts-loader":"^9.5.1",
+       "webpack":"^5.94.0",
+       "webpack-cli":"^5.1.4"
+    }
+ }

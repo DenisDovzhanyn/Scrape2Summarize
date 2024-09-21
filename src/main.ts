@@ -1,13 +1,16 @@
 import { getUserRepositories } from './services/github.service';
 import { Repository, UserRepositories } from './types/github';
 import { getSummarizedUserRepos } from './services/openai.service';
+import { uploadToS3 } from './services/aws.service';
 
-const userRepos: UserRepositories = await getUserRepositories(process.env.SHOULD_SCRAPE === 'true');
-console.log(userRepos);
-const userReposWithSummary: UserRepositories = await getSummarizedUserRepos(userRepos);
+export const handler = async (event: any) => {
 
-console.log(userReposWithSummary);
+    const userRepos: UserRepositories = await getUserRepositories(process.env.SHOULD_SCRAPE === 'true');
 
-export{
-    
+    const userReposWithSummary: UserRepositories = await getSummarizedUserRepos(userRepos);
+
+    await uploadToS3(userReposWithSummary);
+
 }
+
+

@@ -10,7 +10,8 @@ module.exports = {
   },
   output: {
     path: path.resolve(__dirname, './build'),
-    filename: "[name]-bundle.js" // <--- Will be compiled to this single file
+    filename: "[name]-bundle.js",
+    libraryTarget: 'commonjs2',
   },
   resolve: {
     extensions: [".ts", ".tsx", ".js"],
