@@ -2,10 +2,11 @@
   "compilerOptions": {
     "target": "ES2022",         
     "lib": ["ES2015", "DOM"],          
-    "module": "es2022",              
+    "module": "ES2022",              
     "moduleResolution": "node",        
     "strict": true,
-    "esModuleInterop": true
+    "esModuleInterop": true,
+    "rootDir": "src",
   },
   "include": ["./**/*.ts"]
 }
