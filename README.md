@@ -14,4 +14,4 @@ Scrape2Summarize is an automated web scraper that fetches all repositories from 
 - **Automated Scraping:** Fetches all repositories and README files from any specified GitHub profile.
 - **AI-Powered Summaries:** Uses OpenAI’s GPT model to summarize README content in just a few sentences.
 - **Seamless Integration:** Outputs repository names, summaries, and links in a format that can be easily consumed by front-end components (e.g., React).
-- **Low Maintenance:** Once configured, the script will continue to update repository information autonomously.
+- **Low Maintenance:** Once configured, the script will continue to update repository information autonomously..
